@@ -1,0 +1,199 @@
+<?php
+session_start();
+require 'config.php';
+
+$pdo = getDatabaseConnection(); // Use the new function
+
+$message = '';
+
+// Generate CSRF token if not exists
+if (!isset($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Rate limiting
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
+if (!isset($_SESSION['last_login_attempt'])) {
+    $_SESSION['last_login_attempt'] = time();
+}
+
+// Track IP-based login attempts
+$client_ip = $_SERVER['REMOTE_ADDR'];
+$ip_key = 'ip_' . str_replace('.', '_', $client_ip);
+if (!isset($_SESSION[$ip_key])) {
+    $_SESSION[$ip_key] = 0;
+}
+if (!isset($_SESSION[$ip_key . '_time'])) {
+    $_SESSION[$ip_key . '_time'] = time();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Verify CSRF token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $message = 'Invalid request. Please try again.';
+    } else {
+        // Sanitize input
+        $username = filter_var(trim($_POST['username']), FILTER_SANITIZE_STRING);
+        
+        // Check for IP-based rate limiting first (stricter)
+        $ip_attempts = $_SESSION[$ip_key];
+        $ip_time_diff = time() - $_SESSION[$ip_key . '_time'];
+        $cooldown_time = min(pow(2, $ip_attempts) * 30, 3600); // Exponential backoff, max 1 hour
+        
+        if ($ip_attempts >= 10 && $ip_time_diff < $cooldown_time) {
+            $message = 'Too many login attempts from this IP. Please try again later.';
+        } else {
+            $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?');
+            $stmt->execute([$username]);
+            $user = $stmt->fetch();
+
+            if ($user && $user['is_locked'] && time() - strtotime($user['locked_at']) < 600) {
+                $message = 'Your account is locked. Please try again after 10 minutes.';
+            } else {
+                if ($user && $user['is_locked']) {
+                    $stmt = $pdo->prepare('UPDATE users SET is_locked = 0, locked_at = NULL WHERE username = ?');
+                    $stmt->execute([$username]);
+                }
+
+                if ($_SESSION['login_attempts'] >= 5 && time() - $_SESSION['last_login_attempt'] < 300) {
+                    $message = 'Too many login attempts. Please try again after 5 minutes.';
+                } else {
+                    $password = $_POST['password'];
+
+                    if ($user && password_verify($password, $user['password'])) {
+                        if (!$user['is_verified']) {
+                            $message = 'Please verify your email address before logging in.';
+                        } else {
+                            $_SESSION['user_id'] = $user['id'];
+                            $_SESSION['username'] = $user['username']; // Store username in session
+                            $_SESSION['login_attempts'] = 0; // Reset login attempts on successful login
+                            $_SESSION[$ip_key] = 0; // Reset IP-based attempts on successful login
+                            
+                            // Regenerate session ID to prevent session fixation
+                            session_regenerate_id(true);
+                            
+                            header('Location: http://journal.hopto.org/data_entry.php');
+                            exit;
+                        }
+                    } else {
+                        $_SESSION['login_attempts']++;
+                        $_SESSION['last_login_attempt'] = time();
+                        $_SESSION[$ip_key]++;
+                        $_SESSION[$ip_key . '_time'] = time();
+                        $message = 'Invalid username or password';
+
+                        // Lock account after 10 failed attempts
+                        if ($user && $_SESSION['login_attempts'] >= 10) {
+                            $stmt = $pdo->prepare('UPDATE users SET is_locked = 1, locked_at = NOW() WHERE username = ?');
+                            $stmt->execute([$username]);
+                            $message = 'Your account has been locked due to too many failed login attempts. Please try again after 10 minutes.';
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Security headers
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Trade Journal</title>
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('images/image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 480px; /* Increased width by 20% */
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            color: #fff;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ddd;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: #333;
+            color: #fff;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <?php if ($message): ?>
+            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
+        <form action="login.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="http://journal.hopto.org/register.php">Register here</a></p> <!-- Updated URL -->
+        <p><a href="http://journal.hopto.org/forgot_password.php">Forgot Password?</a></p> <!-- Added Forgot Password link -->
+    </div>
+</body>
+</html>
