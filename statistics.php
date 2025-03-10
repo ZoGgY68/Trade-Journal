@@ -463,6 +463,7 @@ arsort($symbol_counts); // Sort by count in descending order
                         <th>Take Profit</th>
                         <th>P&L</th>
                         <th>Strategy</th>
+                        <th>Comment</th> <!-- Added Comment column -->
                     </tr>
                     <?php foreach ($date_trades as $trade): ?>
                     <tr>
@@ -478,6 +479,7 @@ arsort($symbol_counts); // Sort by count in descending order
                             <?php echo number_format($trade['profit_loss'], 2); ?>
                         </td>
                         <td><?php echo htmlspecialchars($trade['strategy']); ?></td>
+                        <td><?php echo htmlspecialchars($trade['comment']); ?></td> <!-- Added Comment data -->
                     </tr>
                     <?php endforeach; ?>
                 </table>
