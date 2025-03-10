@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->Host = 'web28.alfahosting-server.de';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'journal@3-21.net';
-                $mail->Password = 'Test@14554789';
+                $mail->Password = '@8zK@5o##Nysmnad';
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                 $mail->Port = 465;
 
