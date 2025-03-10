@@ -100,3 +100,4 @@ Trade Journal is a web application that allows users to record and analyze their
 This project is licensed under the MIT License.
 # Trade-Journal-2
 # Trade-Journal-2
+# T-Journal
