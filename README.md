@@ -67,6 +67,12 @@ Trade Journal is a web application that allows users to record and analyze their
 
 1. On the trade entry page, scroll down to the "Last Three Trades" section to view your most recent trades.
 
+### Display Trades by Date
+
+1. Navigate to the statistics page: `http://journal.hopto.org/statistics.php`
+2. Enter the start date and end date in the "Display Trades by Date" section.
+3. Click the "Display" button to view trades within the specified date range.
+
 ### View Trade Statistics
 
 1. Navigate to the statistics page: `http://journal.hopto.org/statistics.php`
