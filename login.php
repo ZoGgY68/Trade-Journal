@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $nonce = bin2hex(random_bytes(16));
 
 // Security headers
-header("Content-Security-Policy: default-src 'self'; script-src 'self' https://s3.tradingview.com 'nonce-$nonce'; style-src 'self' 'unsafe-inline'; frame-src https://s.tradingview.com;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://s3.tradingview.com 'nonce-$nonce'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src https://s.tradingview.com;");
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
@@ -114,16 +114,45 @@ header("X-XSS-Protection: 1; mode=block");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Trade Journal</title>
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             background: url('images/image.jpg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
             padding: 0;
             color: #fff;
             display: flex;
-            height: 100vh;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header-description {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+        }
+        .header-description h1 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #4CAF50;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        .header-description p {
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            font-weight: 400;
+            color: #f0f0f0;
+        }
+        .main-content {
+            display: flex;
+            flex: 1;
         }
         .left-container, .middle-container, .right-container {
             height: 100%;
@@ -137,20 +166,46 @@ header("X-XSS-Protection: 1; mode=block");
         }
         .middle-container {
             width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .tradingview-widget-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 70%;
+            height: 100%; /* Use full height available */
             width: 100%;
+            padding: 20px 0;
+            position: relative; /* Added for positioning context */
         }
         .tradingview-widget-container {
-            width: 480px;
-            height: 240px;
+            width: 95%;
+            max-width: 650px;
+            height: 700px !important; /* Increased and forced with !important */
+            min-height: 700px !important; /* Added min-height to ensure it doesn't shrink */
+            position: relative; /* Added for overlay positioning */
+            z-index: 1; /* Ensure widget is above transparency layer */
+        }
+        /* Transparency overlay */
+        .transparency-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2); /* 20% black overlay */
+            z-index: 2; /* Place above the widget */
+            pointer-events: none; /* Allow clicks to pass through to widget */
+        }
+        @media screen and (max-height: 900px) {
+            .tradingview-widget-container {
+                height: 500px !important; /* Smaller height for smaller screens */
+                min-height: 500px !important;
+            }
         }
         .container {
-            max-width: 380px; /* Slightly smaller to fit in middle column */
+            max-width: 380px;
             width: 380px;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.8);
@@ -159,6 +214,7 @@ header("X-XSS-Protection: 1; mode=block");
             text-align: center;
             max-height: 80%;
             overflow-y: auto;
+            margin: 0 auto; /* Center horizontally */
         }
         h1 {
             color: #fff;
@@ -204,80 +260,121 @@ header("X-XSS-Protection: 1; mode=block");
             border-radius: 4px;
             text-align: center;
         }
+        .left-container .tradingview-widget-container {
+            height: 700px !important;
+            min-height: 700px !important;
+            max-height: 700px !important;
+        }
+        
+        /* Ensure page content doesn't overflow */
+        body, html {
+            overflow-x: hidden;
+        }
+        
+        /* Additional styles to fix left container */
+        .left-widget {
+            height: 700px !important;
+            min-height: 700px !important;
+            overflow: hidden !important;
+        }
     </style>
+    <!-- Force refresh with no cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 <body>
-    <div class="left-container">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-wrapper">
-            <div class="tradingview-widget-container" style="width: 480px; height: 240px;">
-                <div id="tradingview_12345" style="width: 100%; height: 100%;"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/tv.js" nonce="<?php echo $nonce; ?>"></script>
-                <script type="text/javascript" nonce="<?php echo $nonce; ?>">
-                new TradingView.widget({
-                    "width": "100%",
-                    "height": "100%",
-                    "symbol": "OANDA:US30USD",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#f1f3f6",
-                    "enable_publishing": false,
-                    "allow_symbol_change": true,
-                    "container_id": "tradingview_12345"
-                });
-                </script>
-            </div>
-        </div>
-        <!-- TradingView Widget END -->
+    <div class="header-description">
+        <h1>Trading Journal</h1>
+        <p>Trade Journal is a comprehensive tool designed to help traders keep track of their trades, analyze performance, and improve their trading strategies.</p>
     </div>
     
-    <div class="middle-container">
-        <div class="container">
-            <h1>Login</h1>
-            <?php if ($message): ?>
-                <div class="message"><?php echo htmlspecialchars($message); ?></div>
-            <?php endif; ?>
-            <form action="login.php" method="POST">
-                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Login</button>
-            </form>
-            <p>Don't have an account? <a href="http://journal.hopto.org/register.php">Register here</a></p>
-            <p><a href="http://journal.hopto.org/forgot_password.php">Forgot Password?</a></p>
+    <div class="main-content">
+        <div class="left-container">
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-wrapper">
+                <div class="tradingview-widget-container left-widget" style="width: 95%; height: 700px !important; min-height: 700px !important; max-height: 700px !important;">
+                    <div id="tradingview_12345" style="width: 100%; height: 100%;"></div>
+                    <div class="transparency-overlay"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js" nonce="<?php echo $nonce; ?>"></script>
+                    <script type="text/javascript" nonce="<?php echo $nonce; ?>">
+                    new TradingView.widget({
+                        "width": "100%",
+                        "height": "100%",
+                        "symbol": "OANDA:US30USD",
+                        "interval": "D",
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#f1f3f6",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "container_id": "tradingview_12345"
+                    });
+                    </script>
+                </div>
+            </div>
+            <!-- TradingView Widget END -->
+        </div>
+        
+        <div class="middle-container">
+            <div class="container">
+                <h1>Login</h1>
+                <?php if ($message): ?>
+                    <div class="message"><?php echo htmlspecialchars($message); ?></div>
+                <?php endif; ?>
+                <form action="login.php" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have an account? <a href="http://journal.hopto.org/register.php">Register here</a></p>
+                <p><a href="http://journal.hopto.org/forgot_password.php">Forgot Password?</a></p>
+            </div>
+        </div>
+        
+        <div class="right-container">
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-wrapper">
+                <div class="tradingview-widget-container" style="width: 95%; height: 700px !important; min-height: 700px !important;">
+                    <div id="tradingview_nas100" style="width: 100%; height: 100%;"></div>
+                    <div class="transparency-overlay"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js" nonce="<?php echo $nonce; ?>"></script>
+                    <script type="text/javascript" nonce="<?php echo $nonce; ?>">
+                    new TradingView.widget({
+                        "width": "100%",
+                        "height": "100%",
+                        "symbol": "OANDA:NAS100USD",
+                        "interval": "D",
+                        "timezone": "Etc/UTC",
+                        "theme": "dark",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#f1f3f6",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "container_id": "tradingview_nas100"
+                    });
+                    </script>
+                </div>
+            </div>
+            <!-- TradingView Widget END -->
         </div>
     </div>
     
-    <div class="right-container">
-        <!-- TradingView Widget BEGIN -->
-        <div class="tradingview-widget-wrapper">
-            <div class="tradingview-widget-container" style="width: 480px; height: 240px;">
-                <div id="tradingview_nas100" style="width: 100%; height: 100%;"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/tv.js" nonce="<?php echo $nonce; ?>"></script>
-                <script type="text/javascript" nonce="<?php echo $nonce; ?>">
-                new TradingView.widget({
-                    "width": "100%",
-                    "height": "100%",
-                    "symbol": "NASDAQ:NDX",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#f1f3f6",
-                    "enable_publishing": false,
-                    "allow_symbol_change": true,
-                    "container_id": "tradingview_nas100"
-                });
-                </script>
-            </div>
-        </div>
-        <!-- TradingView Widget END -->
-    </div>
+    <!-- Force widget height after page load -->
+    <script nonce="<?php echo $nonce; ?>">
+        window.addEventListener('load', function() {
+            const leftWidget = document.querySelector('.left-container .tradingview-widget-container');
+            if (leftWidget) {
+                leftWidget.style.height = '700px';
+                leftWidget.style.minHeight = '700px';
+            }
+        });
+    </script>
 </body>
 </html>
