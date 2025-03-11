@@ -465,7 +465,8 @@ arsort($symbol_counts); // Sort by count in descending order
         <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
             <a href="http://journal.hopto.org/data_entry.php" class="bottom-button">Back to Data Entry</a>
             <a href="http://journal.hopto.org/logout.php" class="bottom-button" style="background-color: #dc3545;">Logout</a>
-            <a href="export_csv.php" class="bottom-button" style="background-color: #28a745; color: white;">Export to CSV</a> <!-- Changed text color to white -->
+            <a href="export_csv.php" class="bottom-button" style="background-color: #28a745; color: white;">Export to CSV</a>
+            <a href="export_statistics.php?user_id=<?php echo $_SESSION['user_id']; ?>" class="bottom-button" style="background-color: #ffc107; color: white;" target="_blank">Share Statistics</a> <!-- Added target="_blank" to open in a new tab -->
         </div>
     </div>
     
