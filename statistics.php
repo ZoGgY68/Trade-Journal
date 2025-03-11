@@ -29,11 +29,6 @@ if (!isset($_SESSION['last_session_regen']) || time() - $_SESSION['last_session_
     $_SESSION['last_session_regen'] = time();
 }
 
-// Generate CSRF token if not exists
-if (!isset($_SESSION['stats_csrf_token'])) {
-    $_SESSION['stats_csrf_token'] = bin2hex(random_bytes(32));
-}
-
 $pdo = getDatabaseConnection();
 if (!$pdo) {
     throw new Exception("Failed to connect to the database.");
@@ -58,7 +53,9 @@ $countStmt = $pdo->prepare('SELECT COUNT(*) FROM trades WHERE user_id = ?');
 if (!$countStmt) {
     throw new Exception("Failed to prepare statement: " . implode(", ", $pdo->errorInfo()));
 }
-$countStmt->execute([$_SESSION['user_id']]);
+if (!$countStmt->execute([$_SESSION['user_id']])) {
+    throw new Exception("Failed to execute statement: " . implode(", ", $countStmt->errorInfo()));
+}
 $totalTrades = $countStmt->fetchColumn();
 $totalPages = ceil($totalTrades / $tradesPerPage);
 
@@ -67,7 +64,9 @@ $recentStmt = $pdo->prepare('SELECT * FROM trades WHERE user_id = ? ORDER BY cre
 if (!$recentStmt) {
     throw new Exception("Failed to prepare statement: " . implode(", ", $pdo->errorInfo()));
 }
-$recentStmt->execute([$_SESSION['user_id']]);
+if (!$recentStmt->execute([$_SESSION['user_id']])) {
+    throw new Exception("Failed to execute statement: " . implode(", ", $recentStmt->errorInfo()));
+}
 $recent_trades = $recentStmt->fetchAll();
 
 // Get all trades with pagination
@@ -75,7 +74,9 @@ $tradesStmt = $pdo->prepare('SELECT * FROM trades WHERE user_id = ? ORDER BY tra
 if (!$tradesStmt) {
     throw new Exception("Failed to prepare statement: " . implode(", ", $pdo->errorInfo()));
 }
-$tradesStmt->execute([$_SESSION['user_id'], $tradesPerPage, $offset]);
+if (!$tradesStmt->execute([$_SESSION['user_id'], $tradesPerPage, $offset])) {
+    throw new Exception("Failed to execute statement: " . implode(", ", $tradesStmt->errorInfo()));
+}
 $paginatedTrades = $tradesStmt->fetchAll();
 
 // Get all trades for statistics
@@ -83,7 +84,9 @@ $allTradesStmt = $pdo->prepare('SELECT * FROM trades WHERE user_id = ?');
 if (!$allTradesStmt) {
     throw new Exception("Failed to prepare statement: " . implode(", ", $pdo->errorInfo()));
 }
-$allTradesStmt->execute([$_SESSION['user_id']]);
+if (!$allTradesStmt->execute([$_SESSION['user_id']])) {
+    throw new Exception("Failed to execute statement: " . implode(", ", $allTradesStmt->errorInfo()));
+}
 $trades = $allTradesStmt->fetchAll();
 
 // Calculate trading statistics
@@ -124,14 +127,15 @@ foreach ($trades as $trade) {
     }
 }
 
-// Symbol counts
+// Symbol counts and P&L
 $symbol_counts = [];
 foreach ($trades as $trade) {
-    if (isset($symbol_counts[$trade['symbol']])) {
-        $symbol_counts[$trade['symbol']]++;
-    } else {
-        $symbol_counts[$trade['symbol']] = 1;
+    $symbol = $trade['symbol'];
+    if (!isset($symbol_counts[$symbol])) {
+        $symbol_counts[$symbol] = ['count' => 0, 'profit_loss' => 0];
     }
+    $symbol_counts[$symbol]['count']++;
+    $symbol_counts[$symbol]['profit_loss'] += $trade['profit_loss'];
 }
 arsort($symbol_counts); // Sort by count in descending order
 ?>
@@ -238,29 +242,6 @@ arsort($symbol_counts); // Sort by count in descending order
         }
         .pagination .current {
             background-color: #007bff;
-        }
-        .filters {
-            background-color: rgba(30, 30, 30, 0.7);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .filters label {
-            margin-right: 10px;
-        }
-        .filters input[type="date"], .filters button {
-            padding: 8px;
-            border: 1px solid #555;
-            border-radius: 4px;
-            background-color: #333;
-            color: #fff;
-        }
-        .filters button {
-            background-color: #28a745;
-            cursor: pointer;
-        }
-        .filters button:hover {
-            background-color: #218838;
         }
         .nav-buttons {
             display: flex;
@@ -403,12 +384,9 @@ arsort($symbol_counts); // Sort by count in descending order
         <h2>Trade Symbols</h2>
         <div style="display: flex; flex-direction: column;">
             <?php
-            foreach ($symbol_counts as $symbol => $count) {
-                $percentage = ($count / $total_trades) * 100;
-                // Calculate P&L for this symbol
-                $symbol_pl = array_sum(array_map(function($trade) use ($symbol) { 
-                    return $trade['symbol'] == $symbol ? $trade['profit_loss'] : 0; 
-                }, $trades));
+            foreach ($symbol_counts as $symbol => $data) {
+                $percentage = ($data['count'] / $total_trades) * 100;
+                $symbol_pl = $data['profit_loss'];
                 ?>
                 <div style='display: flex; align-items: center; margin-bottom: 10px;'>
                     <span style='width: 100px; font-weight: bold;'><?php echo htmlspecialchars($symbol); ?></span>
