@@ -259,6 +259,17 @@ arsort($symbol_counts); // Sort by count in descending order
         .nav-buttons a:hover {
             background-color: #0056b3;
         }
+        .bottom-button {
+            padding: 10px 15px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .bottom-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
