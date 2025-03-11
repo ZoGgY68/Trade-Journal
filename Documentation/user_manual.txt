@@ -1,0 +1,32 @@
+Trade Journal 2 - User Manual
+
+Introduction
+-------------
+Trade Journal 2 is a comprehensive tool designed to help traders keep track of their trades, analyze performance, and improve their trading strategies. This manual will explain the purpose of each field in the application.
+
+Fields and Their Purpose
+-------------------------
+1. **Trade Date**: The date when the trade was executed.
+2. **Symbol**: The ticker symbol of the traded asset (e.g., AAPL for Apple Inc.).
+3. **Trade Type**: The type of trade, such as Buy or Sell.
+4. **Quantity**: The number of shares or units traded.
+5. **Price**: The price at which the asset was bought or sold.
+6. **Commission**: The commission fee paid for executing the trade.
+7. **Total Cost**: The total cost of the trade, including the commission.
+8. **Notes**: Any additional notes or comments about the trade.
+9. **Trade Strategy**: The strategy used for the trade (e.g., Swing Trading, Day Trading).
+10. **Entry Signal**: The signal or indicator that prompted the entry into the trade.
+11. **Exit Signal**: The signal or indicator that prompted the exit from the trade.
+12. **Profit/Loss**: The profit or loss realized from the trade.
+13. **Trade Duration**: The duration for which the trade was held.
+14. **Risk/Reward Ratio**: The ratio of potential profit to potential loss for the trade.
+15. **Trade Outcome**: The outcome of the trade, such as Win or Loss.
+
+Features
+--------
+- **Trade Management**: Easily add, edit, and delete trades.
+- **Performance Analysis**: Generate detailed reports and charts to analyze your trading performance.
+- **Strategy Testing**: Test different trading strategies and compare their results.
+- **User Authentication**: Secure login and registration system.
+
+For further assistance, please refer to the official documentation or contact support.
