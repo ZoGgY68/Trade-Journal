@@ -27,9 +27,57 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 
-// Function to remove trailing zeros
+// Database field type checker function
+function checkFieldType($pdo, $table, $column) {
+    try {
+        $stmt = $pdo->prepare("SHOW COLUMNS FROM {$table} WHERE Field = ?");
+        $stmt->execute([$column]);
+        $columnInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $columnInfo ? $columnInfo['Type'] : 'unknown';
+    } catch (PDOException $e) {
+        return 'Error checking field type: ' . $e->getMessage();
+    }
+}
+
+// Check quantity field type
+$quantityFieldType = checkFieldType($pdo, 'trades', 'quantity');
+
+// Function to remove trailing zeros but keep one zero after the last non-zero digit
 function removeTrailingZeros($number) {
-    return rtrim(rtrim($number, '0'), '.');
+    if ($number === null) {
+        return null;
+    }
+    
+    // Convert to string if it's not already
+    $number = (string)$number;
+    
+    // If there's no decimal point, return as is
+    if (strpos($number, '.') === false) {
+        return $number;
+    }
+    
+    // Split number into integer and decimal parts
+    list($integer, $decimal) = explode('.', $number);
+    
+    // Find the last non-zero character position
+    $lastNonZero = -1;
+    for ($i = strlen($decimal) - 1; $i >= 0; $i--) {
+        if ($decimal[$i] !== '0') {
+            $lastNonZero = $i;
+            break;
+        }
+    }
+    
+    // If all zeros, return just the integer part
+    if ($lastNonZero === -1) {
+        return $integer;
+    }
+    
+    // Keep one zero after the last non-zero digit if possible
+    $keepLength = min($lastNonZero + 2, strlen($decimal));
+    $decimal = substr($decimal, 0, $keepLength);
+    
+    return $integer . '.' . $decimal;
 }
 
 $profit_loss = null;
@@ -242,6 +290,11 @@ $recent_trades = $stmt->fetchAll();
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
+
+        <!-- For debugging only - can be removed once issue is resolved -->
+        <div style="background-color: rgba(0,0,0,0.5); padding: 5px; margin-bottom: 10px; font-size: 12px;">
+            Quantity field type: <?php echo htmlspecialchars($quantityFieldType); ?>
+        </div>
         
         <form action="data_entry.php" method="POST" id="tradeForm">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['entry_csrf_token']); ?>">
@@ -367,12 +420,12 @@ $recent_trades = $stmt->fetchAll();
                 <td><?php echo htmlspecialchars($trade['trade_direction']); ?></td>
                 <td><?php echo htmlspecialchars($trade['symbol']); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['quantity'])); ?></td>
-                <td><?php echo htmlspecialchars(removeTrailingZeros($trade['price'])); ?></td> <!-- Renamed header -->
+                <td><?php echo htmlspecialchars(removeTrailingZeros($trade['price'])); ?></td>
                 <td><?php echo htmlspecialchars($trade['exit_date']); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['exit_price']));; ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['stop_loss'])); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['take_profit'])); ?></td>
-                <td><?php echo htmlspecialchars(removeTrailingZeros($trade['take_profit'])); ?></td>
+                <td><?php echo htmlspecialchars(removeTrailingZeros($trade['profit_loss'])); ?></td>
                 <td><?php echo htmlspecialchars($trade['strategy']); ?></td>
                 <td><?php echo htmlspecialchars($trade['comment']); ?></td>
                 <td>
