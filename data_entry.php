@@ -4,7 +4,7 @@ require 'config.php';
 
 // Security checks
 if (!isset($_SESSION['user_id'])) {
-    header('Location: http://journal.hopto.org/login.php');
+    header('Location: http://trading.3-21.eu/login.php');
     exit;
 }
 
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['success_message'] = 'Trade recorded successfully!';
             
             // Clear all fields and prevent form resubmission
-            header('Location: http://journal.hopto.org/data_entry.php');
+            header('Location: http://trading.3-21.eu/data_entry.php');
             exit;
         } catch (PDOException $e) {
             $message = 'Error: ' . $e->getMessage();
@@ -444,8 +444,8 @@ $recent_trades = $stmt->fetchAll();
         
         <!-- Create a button container with both buttons at the bottom -->
         <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
-            <a href="http://journal.hopto.org/statistics.php" class="bottom-button">View Statistics</a>
-            <a href="http://journal.hopto.org/logout.php" class="bottom-button" style="background-color: #dc3545;">Logout</a>
+            <a href="http://trading.3-21.eu/statistics.php" class="bottom-button">View Statistics</a>
+            <a href="http://trading.3-21.eu/logout.php" class="bottom-button" style="background-color: #dc3545;">Logout</a>
         </div>
     </div>
 </body>

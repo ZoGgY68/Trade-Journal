@@ -46,20 +46,20 @@ Trade Journal is a web application that allows users to record and analyze their
 
 ### Registration
 
-1. Navigate to the registration page: `http://journal.hopto.org/register.php`
+1. Navigate to the registration page: `http://trading.3-21.eu/register.php`
 2. Fill in the registration form with your username, password, and email.
 3. Click the "Register" button.
 4. Check your email for a verification link and click it to verify your email address.
 
 ### Login
 
-1. Navigate to the login page: `http://journal.hopto.org/login.php`
+1. Navigate to the login page: `http://trading.3-21.eu/login.php`
 2. Enter your username and password.
 3. Click the "Login" button.
 
 ### Record Trades
 
-1. After logging in, navigate to the trade entry page: `http://journal.hopto.org/data_entry.php`
+1. After logging in, navigate to the trade entry page: `http://trading.3-21.eu/data_entry.php`
 2. Fill in the trade details such as entry date, exit date, price, quantity, etc.
 3. Click the "Save Trade" button to record the trade.
 
@@ -69,28 +69,28 @@ Trade Journal is a web application that allows users to record and analyze their
 
 ### Display Trades by Date
 
-1. Navigate to the statistics page: `http://journal.hopto.org/statistics.php`
+1. Navigate to the statistics page: `http://trading.3-21.eu/statistics.php`
 2. Enter the start date and end date in the "Display Trades by Date" section.
 3. Click the "Display" button to view trades within the specified date range.
 
 ### View Trade Statistics
 
-1. Navigate to the statistics page: `http://journal.hopto.org/statistics.php`
+1. Navigate to the statistics page: `http://trading.3-21.eu/statistics.php`
 2. Scroll down to view various trade statistics such as average profit/loss, average won, and average lost.
 
 ### View All Trades
 
-1. Navigate to the statistics page: `http://journal.hopto.org/statistics.php`
+1. Navigate to the statistics page: `http://trading.3-21.eu/statistics.php`
 2. Scroll down to the "All Trades" section to view all recorded trades.
 
 ### View Trade Symbols
 
-1. Navigate to the statistics page: `http://journal.hopto.org/statistics.php`
+1. Navigate to the statistics page: `http://trading.3-21.eu/statistics.php`
 2. Scroll down to the "Trade Symbols" section to view the percentage of trades for each symbol.
 
 ### Password Reset
 
-1. Navigate to the forgot password page: `http://journal.hopto.org/forgot_password.php`
+1. Navigate to the forgot password page: `http://trading.3-21.eu/forgot_password.php`
 2. Enter your email address and click the "Send Reset Link" button.
 3. Check your email for a password reset link and click it.
 4. Enter your new password and click the "Reset Password" button.

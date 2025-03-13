@@ -17,6 +17,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirect to login page
-header("Location: http://journal.hopto.org/login.php");
+header("Location: http://trading.3-21.eu/login.php");
 exit;
 ?>

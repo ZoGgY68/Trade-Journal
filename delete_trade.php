@@ -4,7 +4,7 @@ require 'config.php';
 
 // Security checks
 if (!isset($_SESSION['user_id'])) {
-    header('Location: http://journal.hopto.org/login.php');
+    header('Location: http://trading.3-21.eu/login.php');
     exit;
 }
 
@@ -31,11 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['trade_id'])) {
         }
     }
     
-    header('Location: http://journal.hopto.org/data_entry.php');
+    header('Location: http://trading.3-21.eu/data_entry.php');
     exit;
 } else {
     // Invalid request
-    header('Location: http://journal.hopto.org/data_entry.php');
+    header('Location: http://trading.3-21.eu/data_entry.php');
     exit;
 }
 ?>

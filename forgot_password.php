@@ -34,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->Port = 465;
 
             // Recipients
-            $mail->setFrom('no-reply@journal.hopto.org', 'Trade Journal');
+            $mail->setFrom('no-reply@trading.3-21.eu', 'Trade Journal');
             $mail->addAddress($email);
 
             // Content
             $mail->isHTML(true);
             $mail->Subject = 'Password Reset';
-            $reset_link = "http://journal.hopto.org/reset_password.php?token=$token";
+            $reset_link = "http://trading.3-21.eu/reset_password.php?token=$token";
             $mail->Body = "Please click the following link to reset your password: <a href='$reset_link'>$reset_link</a>";
 
             $mail->send();

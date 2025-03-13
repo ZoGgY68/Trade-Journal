@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->rowCount() > 0) {
         $message = "Password reset successfully. Redirecting to login page...";
-        header('Refresh: 3; URL=http://journal.hopto.org/login.php'); // Redirect to login page after 3 seconds
+        header('Refresh: 3; URL=http://trading.3-21.eu/login.php'); // Redirect to login page after 3 seconds
     } else {
         $message = "Invalid or expired token.";
     }

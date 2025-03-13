@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             // Regenerate session ID to prevent session fixation
                             session_regenerate_id(true);
                             
-                            header('Location: http://journal.hopto.org/data_entry.php');
+                            header('Location: http://trading.3-21.eu/data_entry.php');
                             exit;
                         }
                     } else {
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $nonce = bin2hex(random_bytes(16));
 
 // Security headers
-header("Content-Security-Policy: default-src 'self'; script-src 'self' https://s3.tradingview.com 'nonce-$nonce'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src https://s.tradingview.com;");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-$nonce'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
@@ -112,7 +112,7 @@ header("X-XSS-Protection: 1; mode=block");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Trade Journal</title>
+    <title>3-21 Trading Journal</title>
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -170,40 +170,6 @@ header("X-XSS-Protection: 1; mode=block");
             justify-content: center;
             align-items: center;
         }
-        .tradingview-widget-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%; /* Use full height available */
-            width: 100%;
-            padding: 20px 0;
-            position: relative; /* Added for positioning context */
-        }
-        .tradingview-widget-container {
-            width: 95%;
-            max-width: 650px;
-            height: 700px !important; /* Increased and forced with !important */
-            min-height: 700px !important; /* Added min-height to ensure it doesn't shrink */
-            position: relative; /* Added for overlay positioning */
-            z-index: 1; /* Ensure widget is above transparency layer */
-        }
-        /* Transparency overlay */
-        .transparency-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.2); /* 20% black overlay */
-            z-index: 2; /* Place above the widget */
-            pointer-events: none; /* Allow clicks to pass through to widget */
-        }
-        @media screen and (max-height: 900px) {
-            .tradingview-widget-container {
-                height: 500px !important; /* Smaller height for smaller screens */
-                min-height: 500px !important;
-            }
-        }
         .container {
             max-width: 380px;
             width: 380px;
@@ -260,22 +226,171 @@ header("X-XSS-Protection: 1; mode=block");
             border-radius: 4px;
             text-align: center;
         }
-        .left-container .tradingview-widget-container {
-            height: 700px !important;
-            min-height: 700px !important;
-            max-height: 700px !important;
-        }
         
         /* Ensure page content doesn't overflow */
         body, html {
             overflow-x: hidden;
         }
+
+        /* Fireworks CSS */
+        .pyro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .pyro > .before, .pyro > .after {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+            animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
+        }
+        .pyro > .after {
+            animation-delay: 1.25s, 1.25s, 1.25s;
+            animation-duration: 1.25s, 1.25s, 6.25s;
+        }
+        @keyframes bang {
+            to {
+                box-shadow: -70px -115.67px #00ff84, 25px -82.67px #ff009d, -58px -13.67px #0026ff, 58px 57.33px #ff006e, -63px -91.67px #ff0059, -15px 43.33px #ff00d5, -85px 43.33px #ff6600, 57px -31.67px #88ff00, 69px -75.67px #ff00bf, 10px -60.67px #2bff00;
+            }
+        }
+        @keyframes gravity {
+            to {
+                transform: translateY(200px);
+                opacity: 0;
+            }
+        }
+        @keyframes position {
+            0%, 19.9% { margin-top: 10%; margin-left: 40%; }
+            20%, 39.9% { margin-top: 40%; margin-left: 30%; }
+            40%, 59.9% { margin-top: 20%; margin-left: 70%; }
+            60%, 79.9% { margin-top: 30%; margin-left: 20%; }
+            80%, 99.9% { margin-top: 30%; margin-left: 80%; }
+        }
         
-        /* Additional styles to fix left container */
-        .left-widget {
-            height: 700px !important;
-            min-height: 700px !important;
-            overflow: hidden !important;
+        /* Enhanced input fields with animations */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid #555;
+            background-color: transparent;
+            color: #fff;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-bottom: 2px solid #28a745;
+            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
+        }
+        
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #999;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -20px;
+            left: 5px;
+            font-size: 12px;
+            color: #28a745;
+        }
+        
+        /* Pulse animation for login button */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Remember me checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        /* Trading theme elements */
+        .chart-line {
+            height: 50px;
+            width: 100%;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-line svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .chart-line path {
+            stroke: #28a745;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 3s linear forwards;
+        }
+        
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        /* Time of day greeting */
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        /* Enhanced fireworks */
+        .pyro > .before, .pyro > .after {
+            box-shadow: 0 0 #28a745, 0 0 #28a745, 0 0 #28a745, 0 0 #28a745, 0 0 #fff, 0 0 #fff;
         }
     </style>
     <!-- Force refresh with no cache -->
@@ -284,96 +399,106 @@ header("X-XSS-Protection: 1; mode=block");
     <meta http-equiv="Expires" content="0">
 </head>
 <body>
+    <!-- Fireworks effect -->
+    <div class="pyro">
+        <div class="before"></div>
+        <div class="after"></div>
+    </div>
+
     <div class="header-description">
-        <h1>Trading Journal</h1>
+        <h1>3-21 Trading Journal</h1>
         <p>Trade Journal is a comprehensive tool designed to help traders keep track of their trades, analyze performance, and improve their trading strategies.</p>
     </div>
     
     <div class="main-content">
         <div class="left-container">
-            <!-- TradingView Widget BEGIN -->
-            <div class="tradingview-widget-wrapper">
-                <div class="tradingview-widget-container left-widget" style="width: 95%; height: 700px !important; min-height: 700px !important; max-height: 700px !important;">
-                    <div id="tradingview_12345" style="width: 100%; height: 100%;"></div>
-                    <div class="transparency-overlay"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js" nonce="<?php echo $nonce; ?>"></script>
-                    <script type="text/javascript" nonce="<?php echo $nonce; ?>">
-                    new TradingView.widget({
-                        "width": "100%",
-                        "height": "100%",
-                        "symbol": "OANDA:US30USD",
-                        "interval": "D",
-                        "timezone": "Etc/UTC",
-                        "theme": "dark",
-                        "style": "1",
-                        "locale": "en",
-                        "toolbar_bg": "#f1f3f6",
-                        "enable_publishing": false,
-                        "allow_symbol_change": true,
-                        "container_id": "tradingview_12345"
-                    });
-                    </script>
-                </div>
-            </div>
-            <!-- TradingView Widget END -->
+            <!-- Removed TradingView Container -->
         </div>
         
         <div class="middle-container">
             <div class="container">
+                <div class="greeting" id="greeting"></div>
                 <h1>Login</h1>
+                
+                <!-- Trading chart animation -->
+                <div class="chart-line">
+                    <svg viewBox="0 0 500 100">
+                        <path d="M0,50 Q50,30 100,50 T200,50 T300,20 T400,50 T500,40"></path>
+                    </svg>
+                </div>
+                
                 <?php if ($message): ?>
                     <div class="message"><?php echo htmlspecialchars($message); ?></div>
                 <?php endif; ?>
-                <form action="login.php" method="POST">
+                
+                <form action="login.php" method="POST" id="loginForm">
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                    <button type="submit">Login</button>
+                    
+                    <div class="input-group">
+                        <input type="text" id="username" name="username" placeholder=" " required>
+                        <label for="username">Username</label>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder=" " required>
+                        <label for="password">Password</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    
+                    <button type="submit" class="pulse-button" id="loginBtn">Login</button>
+                    <div class="spinner" id="loadingSpinner"></div>
                 </form>
-                <p>Don't have an account? <a href="http://journal.hopto.org/register.php">Register here</a></p>
-                <p><a href="http://journal.hopto.org/forgot_password.php">Forgot Password?</a></p>
+                
+                <p>Don't have an account? <a href="http://trading.3-21.eu/register.php">Register here</a></p>
+                <p><a href="http://trading.3-21.eu/forgot_password.php">Forgot Password?</a></p>
             </div>
         </div>
         
         <div class="right-container">
-            <!-- TradingView Widget BEGIN -->
-            <div class="tradingview-widget-wrapper">
-                <div class="tradingview-widget-container" style="width: 95%; height: 700px !important; min-height: 700px !important;">
-                    <div id="tradingview_nas100" style="width: 100%; height: 100%;"></div>
-                    <div class="transparency-overlay"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js" nonce="<?php echo $nonce; ?>"></script>
-                    <script type="text/javascript" nonce="<?php echo $nonce; ?>">
-                    new TradingView.widget({
-                        "width": "100%",
-                        "height": "100%",
-                        "symbol": "OANDA:NAS100USD",
-                        "interval": "D",
-                        "timezone": "Etc/UTC",
-                        "theme": "dark",
-                        "style": "1",
-                        "locale": "en",
-                        "toolbar_bg": "#f1f3f6",
-                        "enable_publishing": false,
-                        "allow_symbol_change": true,
-                        "container_id": "tradingview_nas100"
-                    });
-                    </script>
-                </div>
-            </div>
-            <!-- TradingView Widget END -->
+            <!-- Removed TradingView Container -->
         </div>
     </div>
-    
-    <!-- Force widget height after page load -->
+
     <script nonce="<?php echo $nonce; ?>">
-        window.addEventListener('load', function() {
-            const leftWidget = document.querySelector('.left-container .tradingview-widget-container');
-            if (leftWidget) {
-                leftWidget.style.height = '700px';
-                leftWidget.style.minHeight = '700px';
+        // Time-based greeting
+        function getGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "";
+            if (hour < 12) greeting = "Good Morning";
+            else if (hour < 18) greeting = "Good Afternoon";
+            else greeting = "Good Evening";
+            return greeting + ", Trader!";
+        }
+        
+        document.getElementById('greeting').textContent = getGreeting();
+        
+        // Form submission with loading indicator
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('loadingSpinner').style.display = 'block';
+        });
+        
+        // Enhanced fireworks effect
+        document.addEventListener('DOMContentLoaded', function() {
+            function createFirework() {
+                const firework = document.createElement('div');
+                firework.className = 'before';
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                document.querySelector('.pyro').appendChild(firework);
+                
+                setTimeout(() => {
+                    firework.remove();
+                }, 1000);
             }
+            
+            setInterval(createFirework, 300);
         });
     </script>
 </body>

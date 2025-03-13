@@ -4,7 +4,7 @@ require 'config.php';
 
 // Security checks
 if (!isset($_SESSION['user_id'])) {
-    header('Location: http://journal.hopto.org/login.php');
+    header('Location: http://trading.3-21.eu/login.php');
     exit;
 }
 
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['trade_id'])) {
             $_SESSION['success_message'] = 'Trade updated successfully!';
             
             // Redirect to data entry page
-            header('Location: http://journal.hopto.org/data_entry.php');
+            header('Location: http://trading.3-21.eu/data_entry.php');
             exit;
         } catch (PDOException $e) {
             $message = 'Error: ' . $e->getMessage();

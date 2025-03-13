@@ -19,7 +19,7 @@ set_exception_handler(function($exception) {
 
 // Security checks
 if (!isset($_SESSION['user_id'])) {
-    header('Location: http://journal.hopto.org/login.php');
+    header('Location: http://trading.3-21.eu/login.php');
     exit;
 }
 
@@ -277,8 +277,8 @@ arsort($symbol_counts); // Sort by count in descending order
         <h1>Trade Journal Statistics</h1>
         
         <div class="nav-buttons">
-            <a href="http://journal.hopto.org/data_entry.php">Back to Trade Entry</a>
-            <a href="http://journal.hopto.org/logout.php">Logout</a>
+            <a href="http://trading.3-21.eu/data_entry.php">Back to Trade Entry</a>
+            <a href="http://trading.3-21.eu/logout.php">Logout</a>
         </div>
         
         <!-- Main Statistics Overview -->
@@ -474,8 +474,8 @@ arsort($symbol_counts); // Sort by count in descending order
         </table>
         
         <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
-            <a href="http://journal.hopto.org/data_entry.php" class="bottom-button">Back to Data Entry</a>
-            <a href="http://journal.hopto.org/logout.php" class="bottom-button" style="background-color: #dc3545;">Logout</a>
+            <a href="http://trading.3-21.eu/data_entry.php" class="bottom-button">Back to Data Entry</a>
+            <a href="http://trading.3-21.eu/logout.php" class="bottom-button" style="background-color: #dc3545;">Logout</a>
             <a href="export_csv.php" class="bottom-button" style="background-color: #28a745; color: white;">Export to CSV</a>
             <a href="export_statistics.php?user_id=<?php echo $_SESSION['user_id']; ?>" class="bottom-button" style="background-color: #ffc107; color: white;" target="_blank">Share Statistics</a> <!-- Added target="_blank" to open in a new tab -->
         </div>

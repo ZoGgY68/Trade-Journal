@@ -10,7 +10,7 @@ function log_message($message) {
 
 if (!isset($_SESSION['user_id'])) {
     log_message("User not logged in.");
-    header('Location: http://journal.hopto.org/login.php');
+    header('Location: http://trading.3-21.eu/login.php');
     exit;
 }
 

@@ -52,13 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->Port = 465;
 
                 // Recipients
-                $mail->setFrom('no-reply@journal.hopto.org', 'Trade Journal');
+                $mail->setFrom('no-reply@trading.3-21.eu', 'Trade Journal');
                 $mail->addAddress($email);
 
                 // Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Email Verification';
-                $verification_link = "http://journal.hopto.org/verify.php?token=$token";
+                $verification_link = "http://trading.3-21.eu/verify.php?token=$token";
                 $mail->Body = "Please click the following link to verify your email: <a href='$verification_link'>$verification_link</a>";
 
                 $mail->send();
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $message = "Failed to send verification email. Mailer Error: {$mail->ErrorInfo}";
             }
 
-            header('Location: http://journal.hopto.org/login.php'); // Updated URL
+            header('Location: http://trading.3-21.eu/login.php'); // Updated URL
         } catch (PDOException $e) {
             $message = 'Error: ' . $e->getMessage();
         }
@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="email" id="email" name="email" required>
             <button type="submit">Register</button>
         </form>
-        <p>Already have an account? <a href="http://journal.hopto.org/login.php">Login here</a></p> <!-- Updated URL -->
+        <p>Already have an account? <a href="http://trading.3-21.eu/login.php">Login here</a></p> <!-- Updated URL -->
     </div>
 </body>
 </html>

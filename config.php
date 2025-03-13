@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$db = 'trade_one'; // updated database name
-$user = 'root';
-$pass = 'Hannes-14554'; // add the correct password here
+$db = 'trade_journal_2'; // updated database name
+$user = 'tj2';
+$pass = 'journal1234'; // add the correct password here
 
 $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
 $options = [

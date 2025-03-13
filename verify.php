@@ -15,7 +15,7 @@ if (isset($_GET['token'])) {
     if ($user) {
         $stmt = $pdo->prepare('UPDATE users SET is_verified = 1, token = NULL WHERE id = ?');
         $stmt->execute([$user['id']]);
-        header('Location: http://journal.hopto.org/login.php');
+        header('Location: http://trading.3-21.eu/login.php');
         exit;
     } else {
         $message = "Invalid verification link.";

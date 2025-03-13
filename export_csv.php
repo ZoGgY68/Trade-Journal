@@ -4,7 +4,7 @@ require 'config.php';
 
 // Security checks
 if (!isset($_SESSION['user_id'])) {
-    header('Location: http://journal.hopto.org/login.php');
+    header('Location: http://trading.3-21.eu/login.php');
     exit;
 }
 
