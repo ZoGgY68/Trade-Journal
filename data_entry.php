@@ -27,21 +27,6 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 
-// Database field type checker function
-function checkFieldType($pdo, $table, $column) {
-    try {
-        $stmt = $pdo->prepare("SHOW COLUMNS FROM {$table} WHERE Field = ?");
-        $stmt->execute([$column]);
-        $columnInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $columnInfo ? $columnInfo['Type'] : 'unknown';
-    } catch (PDOException $e) {
-        return 'Error checking field type: ' . $e->getMessage();
-    }
-}
-
-// Check quantity field type
-$quantityFieldType = checkFieldType($pdo, 'trades', 'quantity');
-
 // Function to remove trailing zeros but keep one zero after the last non-zero digit
 function removeTrailingZeros($number) {
     if ($number === null) {
@@ -291,11 +276,6 @@ $recent_trades = $stmt->fetchAll();
             </div>
         <?php endif; ?>
 
-        <!-- For debugging only - can be removed once issue is resolved -->
-        <div style="background-color: rgba(0,0,0,0.5); padding: 5px; margin-bottom: 10px; font-size: 12px;">
-            Quantity field type: <?php echo htmlspecialchars($quantityFieldType); ?>
-        </div>
-        
         <form action="data_entry.php" method="POST" id="tradeForm">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['entry_csrf_token']); ?>">
             <div class="form-row">
@@ -310,7 +290,7 @@ $recent_trades = $stmt->fetchAll();
                         <option value="short">Short</option>
                         <option value="long">Long</option>
                     </select>
-                </div>
+                </div>        
                 <div>
                     <label for="symbol">Symbol:</label>
                     <input list="symbols" id="symbol" name="symbol" required>
@@ -422,7 +402,7 @@ $recent_trades = $stmt->fetchAll();
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['quantity'])); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['price'])); ?></td>
                 <td><?php echo htmlspecialchars($trade['exit_date']); ?></td>
-                <td><?php echo htmlspecialchars(removeTrailingZeros($trade['exit_price']));; ?></td>
+                <td><?php echo htmlspecialchars(removeTrailingZeros($trade['exit_price'])); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['stop_loss'])); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['take_profit'])); ?></td>
                 <td><?php echo htmlspecialchars(removeTrailingZeros($trade['profit_loss'])); ?></td>

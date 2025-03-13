@@ -1,0 +1,46 @@
+[13-Mar-2025 14:21:50 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 92
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 93
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 94
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 98
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 102
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 103
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 426
+[13-Mar-2025 14:22:46 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 427
+[13-Mar-2025 14:23:07 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 426
+[13-Mar-2025 14:23:07 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 427
+[13-Mar-2025 14:25:28 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 14:25:28 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 14:29:14 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 14:29:14 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 14:30:40 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:31:22 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:31:23 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 14:31:23 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 14:32:03 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:37:42 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:37:42 UTC] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in /var/www/Trade-Journal-2/login.php on line 52
+[13-Mar-2025 14:37:42 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 14:37:42 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 14:54:27 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:55:29 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:55:29 UTC] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in /var/www/Trade-Journal-2/login.php on line 52
+[13-Mar-2025 14:55:29 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 14:55:29 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 14:56:43 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:57:30 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 14:57:30 UTC] PHP Deprecated:  strtotime(): Passing null to parameter #1 ($datetime) of type string is deprecated in /var/www/Trade-Journal-2/login.php on line 52
+[13-Mar-2025 14:57:30 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 14:57:30 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 15:03:43 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:08:25 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:08:33 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:08:39 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:09:05 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:10:54 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:10:54 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 15:10:54 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407
+[13-Mar-2025 15:11:18 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:11:35 UTC] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in /var/www/Trade-Journal-2/login.php on line 38
+[13-Mar-2025 15:11:35 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 406
+[13-Mar-2025 15:11:35 UTC] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in /var/www/Trade-Journal-2/data_entry.php on line 407

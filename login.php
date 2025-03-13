@@ -49,47 +49,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$username]);
             $user = $stmt->fetch();
 
-            if ($user && $user['is_locked'] && time() - strtotime($user['locked_at']) < 600) {
-                $message = 'Your account is locked. Please try again after 10 minutes.';
+            if ($user && $user['is_locked']) {
+                $message = 'Your account has been locked. Please contact the administrator at admin@trading.3-21.eu for assistance.';
+            } else if ($_SESSION['login_attempts'] >= 5 && time() - $_SESSION['last_login_attempt'] < 300) {
+                $message = 'Too many login attempts. Please try again after 5 minutes.';
             } else {
-                if ($user && $user['is_locked']) {
-                    $stmt = $pdo->prepare('UPDATE users SET is_locked = 0, locked_at = NULL WHERE username = ?');
-                    $stmt->execute([$username]);
-                }
+                $password = $_POST['password'];
 
-                if ($_SESSION['login_attempts'] >= 5 && time() - $_SESSION['last_login_attempt'] < 300) {
-                    $message = 'Too many login attempts. Please try again after 5 minutes.';
-                } else {
-                    $password = $_POST['password'];
-
-                    if ($user && password_verify($password, $user['password'])) {
-                        if (!$user['is_verified']) {
-                            $message = 'Please verify your email address before logging in.';
-                        } else {
-                            $_SESSION['user_id'] = $user['id'];
-                            $_SESSION['username'] = $user['username']; // Store username in session
-                            $_SESSION['login_attempts'] = 0; // Reset login attempts on successful login
-                            $_SESSION[$ip_key] = 0; // Reset IP-based attempts on successful login
-                            
-                            // Regenerate session ID to prevent session fixation
-                            session_regenerate_id(true);
-                            
-                            header('Location: http://trading.3-21.eu/data_entry.php');
-                            exit;
-                        }
+                if ($user && password_verify($password, $user['password'])) {
+                    if (!$user['is_verified']) {
+                        $message = 'Please verify your email address before logging in.';
                     } else {
-                        $_SESSION['login_attempts']++;
-                        $_SESSION['last_login_attempt'] = time();
-                        $_SESSION[$ip_key]++;
-                        $_SESSION[$ip_key . '_time'] = time();
-                        $message = 'Invalid username or password';
-
-                        // Lock account after 10 failed attempts
-                        if ($user && $_SESSION['login_attempts'] >= 10) {
-                            $stmt = $pdo->prepare('UPDATE users SET is_locked = 1, locked_at = NOW() WHERE username = ?');
-                            $stmt->execute([$username]);
-                            $message = 'Your account has been locked due to too many failed login attempts. Please try again after 10 minutes.';
+                        $_SESSION['user_id'] = $user['id'];
+                        $_SESSION['username'] = $user['username'];
+                        $_SESSION['is_admin'] = $user['is_admin'] ?? false;
+                        $_SESSION['login_attempts'] = 0;
+                        $_SESSION[$ip_key] = 0;
+                        
+                        // Update last login time
+                        $stmt = $pdo->prepare('UPDATE users SET last_login = NOW() WHERE id = ?');
+                        $stmt->execute([$user['id']]);
+                        
+                        session_regenerate_id(true);
+                        
+                        if ($_SESSION['is_admin']) {
+                            header('Location: http://trading.3-21.eu/admin.php');
+                        } else {
+                            header('Location: http://trading.3-21.eu/data_entry.php');
                         }
+                        exit;
+                    }
+                } else {
+                    $_SESSION['login_attempts']++;
+                    $_SESSION['last_login_attempt'] = time();
+                    $_SESSION[$ip_key]++;
+                    $_SESSION[$ip_key . '_time'] = time();
+                    $message = 'Invalid username or password';
+
+                    // Lock account after too many failed attempts
+                    if ($user && $_SESSION['login_attempts'] >= 10) {
+                        $stmt = $pdo->prepare('UPDATE users SET is_locked = 1, locked_at = NOW() WHERE id = ?');
+                        $stmt->execute([$user['id']]);
+                        $message = 'Your account has been locked due to too many failed login attempts. Please contact the administrator.';
                     }
                 }
             }
